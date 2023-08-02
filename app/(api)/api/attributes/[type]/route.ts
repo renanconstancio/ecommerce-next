@@ -3,10 +3,21 @@ import dateFormat from "@/libs/dateFormat";
 
 import { NextResponse } from "next/server";
 
-export async function GET(request: Request) {
+export async function GET(
+  request: Request,
+  { params }: { params: { type: string | null } }
+) {
   try {
+    let where = { attibuteId: null, deletedAt: null, active: true };
+
+    if (!params.type) throw new Error("");
+
+    where = { type: String(params.type).toLocaleUpperCase(), ...where };
+
+    console.log(where);
+
     const response = await prisma.attibute.findMany({
-      where: { attibuteId: null, deletedAt: null, active: true },
+      where,
       include: {
         childrens: true,
       },
