@@ -12,7 +12,6 @@ export async function GET(
     let where: Prisma.AttributeWhereInput = {
       attibuteId: null,
       deletedAt: null,
-      active: true,
     };
 
     if (params?.type?.length) {
@@ -23,7 +22,14 @@ export async function GET(
     const response = await prisma.attribute.findMany({
       where: { ...where },
       include: {
-        childrens: true,
+        childrens: {
+          orderBy: {
+            position: "asc",
+          },
+        },
+      },
+      orderBy: {
+        position: "asc",
       },
     });
 
@@ -32,16 +38,21 @@ export async function GET(
       type: item.type,
       name: item.name,
       description: item.description,
+      position: item.position,
+      active: item.active,
       createdAt: dateFormat(item.createdAt),
       updatedAt: dateFormat(item.updatedAt),
       deletedAt: dateFormat(item.deletedAt),
       childrens: item.childrens.map((child) => ({
         id: child.id,
+        attibuteId: child.attibuteId,
         type: child.type,
         name: child.name,
         description: child.description,
         palette: child.palette?.split(","),
         shipping: child.shipping?.split(","),
+        position: child.position,
+        active: child.active,
         createdAt: dateFormat(child.createdAt),
         updatedAt: dateFormat(child.updatedAt),
         deletedAt: dateFormat(child.deletedAt),

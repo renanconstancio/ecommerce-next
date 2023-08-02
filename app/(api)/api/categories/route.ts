@@ -5,35 +5,45 @@ import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
   try {
-    const response = await prisma.attibute.findMany({
-      where: { attibuteId: null, deletedAt: null, active: true },
+    const response = await prisma.category.findMany({
+      where: { categoryId: null, deletedAt: null },
       include: {
-        childrens: true,
+        childrens: {
+          orderBy: {
+            position: "asc",
+          },
+        },
+      },
+      orderBy: {
+        position: "asc",
       },
     });
 
-    const attibutes = response.map((item) => ({
+    const categories = response.map((item) => ({
       id: item.id,
-      type: item.type,
       name: item.name,
       description: item.description,
+      images: item.images,
+      active: item.active,
+      position: item.position,
       createdAt: dateFormat(item.createdAt),
       updatedAt: dateFormat(item.updatedAt),
       deletedAt: dateFormat(item.deletedAt),
       childrens: item.childrens.map((child) => ({
         id: child.id,
-        type: child.type,
+        categoryId: child.categoryId,
         name: child.name,
         description: child.description,
-        palette: child.description,
-        shipping: child.shipping,
+        images: child.images,
+        active: child.active,
+        position: child.position,
         createdAt: dateFormat(child.createdAt),
         updatedAt: dateFormat(child.updatedAt),
         deletedAt: dateFormat(child.deletedAt),
       })),
     }));
 
-    return NextResponse.json({ data: attibutes });
+    return NextResponse.json({ data: categories });
   } catch (error) {
     return NextResponse.json(
       { message: String(error).toString() },

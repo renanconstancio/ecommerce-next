@@ -17,8 +17,8 @@ model Category {
   updatedAt   DateTime   @updatedAt
   deletedAt   DateTime?
   name        String
-  description String
-  images      String
+  description String?
+  images      String?
   active      Boolean    @default(false)
   position    Int        @default(0)
   categoryId  String?
