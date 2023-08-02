@@ -1,23 +1,27 @@
 import { prisma } from "@/libs/prisma";
+import { Prisma } from "@prisma/client";
 import dateFormat from "@/libs/dateFormat";
 
 import { NextResponse } from "next/server";
 
 export async function GET(
   request: Request,
-  { params }: { params: { type: string | null } }
+  { params }: { params: { type: string[] } | undefined }
 ) {
   try {
-    let where = { attibuteId: null, deletedAt: null, active: true };
+    let where: Prisma.AttributeWhereInput = {
+      attibuteId: null,
+      deletedAt: null,
+      active: true,
+    };
 
-    if (!params.type) throw new Error("");
+    if (params?.type?.length) {
+      const paramsType = params.type[0].toLocaleUpperCase();
+      where = { type: paramsType, ...where };
+    }
 
-    where = { type: String(params.type).toLocaleUpperCase(), ...where };
-
-    console.log(where);
-
-    const response = await prisma.attibute.findMany({
-      where,
+    const response = await prisma.attribute.findMany({
+      where: { ...where },
       include: {
         childrens: true,
       },

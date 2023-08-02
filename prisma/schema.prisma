@@ -41,7 +41,7 @@ model Category {
 //   BRAND=  'BRAND'
 // }
 
-model Attibute {
+model Attribute {
   id          String     @id @default(cuid())
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
@@ -54,11 +54,11 @@ model Attibute {
   active      Boolean    @default(false)
   position    Int        @default(0)
   attibuteId  String?
-  childrens   Attibute[] @relation(name: "attibute")
-  parent      Attibute?  @relation(name: "attibute", fields: [attibuteId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  childrens   Attribute[] @relation(name: "attibute")
+  parent      Attribute?  @relation(name: "attibute", fields: [attibuteId], references: [id], onDelete: Restrict, onUpdate: Restrict)
 
   @@index([attibuteId])
-  @@map("attibutes")
+  @@map("attributes")
 }
 
 model Promotion {
