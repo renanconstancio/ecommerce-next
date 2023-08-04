@@ -11,8 +11,6 @@ export async function getCategories(): Promise<{ data: CategoriesProps[] }> {
 export default async function Home() {
   const { data: dataCategories } = await getCategories()
 
-  console.log(dataCategories)
-
   return (
     <main className="flex flex-1 flex-col h-screen">
       <Header data={dataCategories} />

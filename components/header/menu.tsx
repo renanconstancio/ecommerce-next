@@ -1,16 +1,23 @@
+// import menu from './menu.module.css'
+
 import MenuItem from './menu-list'
 
 type MenuProps = {
   id: string
   name: string
-  children: MenuProps[]
+  childrens: MenuProps[]
 }
 
-export default function Menu({ data }: { data: MenuProps[] }) {
+export default function Menu({ data, ...rest }: { data: MenuProps[] }) {
   return (
-    <ul className="flex flex-row flex-nowrap space-x-2">
+    <ul {...rest}>
       {data.map((item) => (
-        <MenuItem key={item.id} id={item.id} name={item.name} />
+        <MenuItem
+          key={item.id}
+          id={item.id}
+          name={item.name}
+          childrens={item.childrens}
+        />
       ))}
     </ul>
   )

@@ -1,0 +1,15 @@
+.menu {
+  @apply 
+    flex flex-col flex-nowrap items-center space-y-2 h-full w-full inset-0 fixed bg-slate-200
+    sm:flex-row sm:space-y-0 sm:space-x-1 sm:relative sm:bg-transparent
+}
+.menu li {
+  @apply p-1 h-full leading-[50px]
+}
+
+.menu li .menu__sub {
+  @apply hidden absolute bg-slate-200 w-full left-0 top-[100%]
+}
+.menu li:hover .menu__sub {
+  @apply block
+}

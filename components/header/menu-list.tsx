@@ -1,12 +1,18 @@
+import menu from './menu.module.css'
+
+import Menu from './menu'
+
 interface MenuItemProps {
   id: string
   name: string
+  childrens: MenuItemProps[]
 }
 
-export default function MenuItem({ id, name }: MenuItemProps) {
+export default function MenuItem({ id, name, childrens }: MenuItemProps) {
   return (
-    <li className="p-1" key={id}>
+    <li key={id}>
       {name}
+      {childrens && <Menu data={childrens} className={menu.menu__sub} />}
     </li>
   )
 }
