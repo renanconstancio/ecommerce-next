@@ -1,5 +1,3 @@
-// import menu from './menu.module.css'
-
 import MenuItem from './menu-list'
 
 type MenuProps = {
@@ -8,9 +6,16 @@ type MenuProps = {
   childrens: MenuProps[]
 }
 
-export default function Menu({ data, ...rest }: { data: MenuProps[] }) {
+export default function Menu({
+  data,
+  className,
+  ...rest
+}: {
+  data: MenuProps[]
+  className?: string
+}) {
   return (
-    <ul {...rest}>
+    <ul className={className} {...rest}>
       {data.map((item) => (
         <MenuItem
           key={item.id}

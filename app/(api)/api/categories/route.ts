@@ -1,5 +1,5 @@
 import { prisma } from '@/libs/prisma'
-import dateFormat from '@/libs/dateFormat'
+import dateFormat from '@/utils/dateFormat'
 
 import { NextResponse } from 'next/server'
 

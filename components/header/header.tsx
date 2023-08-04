@@ -1,22 +1,21 @@
-import menu from './menu.module.css'
+import { Suspense } from 'react'
 
 import Container from '@/components/container'
-import Menu from '@/components/header/menu'
+import Navigation from '@/components/header/navigation'
+import NavigationSkeleton from '@/components/header/navigation-skeleton'
 
-import type { CategoriesProps } from '@/types'
-
-interface HeaderProps {
-  data: CategoriesProps[]
-}
-
-export default function Header({ data }: HeaderProps) {
+export default function Header() {
   return (
-    <header className="bg-slate-400">
+    <header className="border-b border-b-zinc-300">
       <Container>
-        <nav className="h-14 flex flex-row items-center">
-          <Menu data={data} className={menu.menu} />
-        </nav>
+        <section className="flex flex-row justify-between py-4">
+          <span>logo</span>
+        </section>
       </Container>
+
+      <Suspense fallback={<NavigationSkeleton />}>
+        <Navigation />
+      </Suspense>
     </header>
   )
 }
