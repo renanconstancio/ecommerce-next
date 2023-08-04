@@ -1,23 +1,23 @@
-import { prisma } from "@/libs/prisma";
-import dateFormat from "@/libs/dateFormat";
+import { prisma } from '@/libs/prisma'
+import dateFormat from '@/libs/dateFormat'
 
-import { NextResponse } from "next/server";
+import { NextResponse } from 'next/server'
 
-export async function GET(request: Request) {
+export async function GET() {
   try {
     const response = await prisma.category.findMany({
       where: { categoryId: null, deletedAt: null },
       include: {
         childrens: {
           orderBy: {
-            position: "asc",
+            position: 'asc',
           },
         },
       },
       orderBy: {
-        position: "asc",
+        position: 'asc',
       },
-    });
+    })
 
     const categories = response.map((item) => ({
       id: item.id,
@@ -41,15 +41,16 @@ export async function GET(request: Request) {
         updatedAt: dateFormat(child.updatedAt),
         deletedAt: dateFormat(child.deletedAt),
       })),
-    }));
+    }))
 
-    return NextResponse.json({ data: categories });
+    return NextResponse.json({ data: categories })
   } catch (error) {
     return NextResponse.json(
       { message: String(error).toString() },
-      { status: 500 }
-    );
+      { status: 500 },
+    )
   }
 }
 
-export async function POST(request: Request) {}
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+export async function POST() {}
