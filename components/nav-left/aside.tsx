@@ -25,7 +25,7 @@ export default function NavLeft() {
       arrSearch = { ...arrSearch, [type]: [id] }
     }
 
-    // const buff = `${type}=${JSON.stringify(arrSearch)}`
+    // const buff = `${type}=${JSON.stringi fy(arrSearch)}`
     // const isUri = arrUri.find((item) => item === buff)
     // if (isUri) {
     //   arrUri = arrUri.filter((item) => item !== buff)
