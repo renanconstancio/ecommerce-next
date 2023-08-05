@@ -13,20 +13,30 @@ export default function NavLeft() {
 
   let uri = '/search/'
 
-  let arr: string[] = []
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // const arrUri: string[] = []
+  let arrSearch: { [x: string]: string[] } = {}
+
   function handleResolve({ type, id }: { type: string; id: string }) {
-    const isMatch = arr.find((item) => item === id)
-    if (isMatch) {
-      arr = arr.filter((item) => item !== id)
+    const isSearch =
+      arrSearch?.[type] && arrSearch?.[type].find((item) => item === id)
+    if (isSearch) {
+      arrSearch[type] = arrSearch[type].filter((item) => item !== id)
     } else {
-      arr.push(id)
+      arrSearch = { ...arrSearch, [type]: [id] }
     }
 
-    const buff = encode(`${type}=${JSON.stringify(arr)}`)
-    uri = `${uri}?filter_search=${buff}`
+    // const buff = `${type}=${JSON.stringify(arrSearch)}`
+    // const isUri = arrUri.find((item) => item === buff)
+    // if (isUri) {
+    //   arrUri = arrUri.filter((item) => item !== buff)
+    // } else {
+    //   arrUri.push(buff)
+    // }
 
-    console.log(uri, `${type}=${JSON.stringify(arr)}&`)
+    // const buff = encode(`${type}=${JSON.stringify(arrSearch)}`)
+    uri = `?filter_search=${JSON.stringify(arrSearch)}`
+
+    console.log(uri)
     // route.push(uri)
   }
 
