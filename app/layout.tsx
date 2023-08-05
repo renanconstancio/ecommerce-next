@@ -2,6 +2,11 @@ import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 
+import Container from '@/components/container'
+import Header from '@/components/header/header'
+import NavLeft from '@/components/nav-left/aside'
+import { Suspense } from 'react'
+
 const inter = Inter({ subsets: ['latin'], variable: '--inter' })
 
 export const metadata: Metadata = {
@@ -16,7 +21,19 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-br" className={inter.variable}>
-      <body>{children}</body>
+      <body>
+        <main className="flex flex-1 flex-col h-screen">
+          <Header />
+          <Container>
+            <main className="flex flex-row flex-nowrap m-4">
+              <Suspense fallback={'A'}>
+                <NavLeft />
+              </Suspense>
+              {children}
+            </main>
+          </Container>
+        </main>
+      </body>
     </html>
   )
 }

@@ -2,22 +2,36 @@
 
 import { use } from 'react'
 import { getAttributes } from '@/actions/attributes'
-import { useRouter } from 'next/navigation'
-import { AttributeProps } from '@/types'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { encode } from '@/utils/base64'
 
 export default function NavLeft() {
   const route = useRouter()
+  const pathName = usePathname()
 
   const { data: dataAttributes } = use(getAttributes())
 
-  let uri = '/filters/'
-  function handleResolve(item: AttributeProps) {
-    uri = `${uri}/colors/a_a`
-    route.push(uri)
+  let uri = '/search/'
+
+  let arr: string[] = []
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  function handleResolve({ type, id }: { type: string; id: string }) {
+    const isMatch = arr.find((item) => item === id)
+    if (isMatch) {
+      arr = arr.filter((item) => item !== id)
+    } else {
+      arr.push(id)
+    }
+
+    const buff = encode(`${type}=${JSON.stringify(arr)}`)
+    uri = `${uri}?filter_search=${buff}`
+
+    console.log(uri, `${type}=${JSON.stringify(arr)}&`)
+    // route.push(uri)
   }
 
   return (
-    <aside className="flex-initial w-60 ">
+    <aside className="flex-initial w-60">
       <ol className="space-y-8 border border-gray-200 rounded-lg shadow-md p-4">
         {dataAttributes.map((item) => (
           <dd key={item.id} className="pb-4">
@@ -34,7 +48,9 @@ export default function NavLeft() {
                     style={{
                       backgroundColor: child.palette[0],
                     }}
-                    onClick={() => handleResolve(child)}
+                    onClick={() =>
+                      handleResolve({ type: item.type, id: child.name })
+                    }
                   >
                     <span
                       style={{
@@ -77,6 +93,9 @@ export default function NavLeft() {
                     <li
                       key={child.id}
                       className="relative rounded-sm px-2 hover:underline cursor-pointer"
+                      onClick={() =>
+                        handleResolve({ type: item.type, id: child.name })
+                      }
                     >
                       {child.name}
                     </li>
