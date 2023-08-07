@@ -2,7 +2,7 @@
 
 import { use } from 'react'
 import { getAttributes } from '@/actions/attributes'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { encode } from '@/utils/base64'
 
 export default function NavLeft() {
@@ -14,30 +14,25 @@ export default function NavLeft() {
   let uri = '/search/'
 
   // const arrUri: string[] = []
-  let arrSearch: { [x: string]: string[] } = {}
+  const arrSearch: { [x: string]: string[] } = {}
 
   function handleResolve({ type, id }: { type: string; id: string }) {
-    const isSearch =
-      arrSearch?.[type] && arrSearch?.[type].find((item) => item === id)
-    if (isSearch) {
-      arrSearch[type] = arrSearch[type].filter((item) => item !== id)
+    const isSearch = arrSearch?.[type]?.find((item) => item === id)
+    if (!isSearch) {
+      if (!arrSearch[type]) {
+        arrSearch[type] = [id]
+      } else {
+        arrSearch[type] = [...arrSearch[type], id]
+      }
     } else {
-      arrSearch = { ...arrSearch, [type]: [id] }
+      arrSearch[type] = arrSearch[type].filter((item) => item !== id)
     }
 
-    // const buff = `${type}=${JSON.stringi fy(arrSearch)}`
-    // const isUri = arrUri.find((item) => item === buff)
-    // if (isUri) {
-    //   arrUri = arrUri.filter((item) => item !== buff)
-    // } else {
-    //   arrUri.push(buff)
-    // }
+    const buff = encode(`${JSON.stringify(arrSearch)}`)
+    uri = `?filter_search=${buff}`
 
-    // const buff = encode(`${type}=${JSON.stringify(arrSearch)}`)
-    uri = `?filter_search=${JSON.stringify(arrSearch)}`
-
-    console.log(uri)
-    // route.push(uri)
+    console.log(uri, pathName)
+    route.push(uri)
   }
 
   return (
