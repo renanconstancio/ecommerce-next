@@ -2,18 +2,22 @@
 
 import { use } from 'react'
 import { getAttributes } from '@/actions/attributes'
-import { usePathname, useRouter } from 'next/navigation'
-import { encode } from '@/utils/base64'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { decode, encode } from '@/utils/base64'
 
 export default function NavLeft() {
+  let uri = ''
+
   const route = useRouter()
-  const pathName = usePathname()
+
+  const { get } = useSearchParams()
 
   const { data: dataAttributes } = use(getAttributes())
 
-  let uri = '/search/'
+  let qParams: { [x: string]: string[] } = {}
+  if (get('filter_search'))
+    qParams = JSON.parse(decode(get('filter_search') || ''))
 
-  // const arrUri: string[] = []
   const arrSearch: { [x: string]: string[] } = {}
 
   function handleResolve({ type, id }: { type: string; id: string }) {
@@ -29,9 +33,9 @@ export default function NavLeft() {
     }
 
     const buff = encode(`${JSON.stringify(arrSearch)}`)
-    uri = `?filter_search=${buff}`
+    uri = `/search?filter_search=`
+    if (arrSearch[type].length > 0) uri = `/search?filter_search=${buff}`
 
-    console.log(uri, pathName)
     route.push(uri)
   }
 
@@ -49,7 +53,24 @@ export default function NavLeft() {
                 {item.childrens.map((child) => (
                   <li
                     key={child.id}
-                    className="relative rounded-sm w-5 h-5 overflow-hidden text-[0px] cursor-pointer"
+                    className={`
+                        relative 
+                        rounded-sm 
+                        w-5 
+                        h-5 
+                        overflow-hidden 
+                        text-[0px] 
+                        cursor-pointer
+                        border-[3px]
+                        
+                        ${
+                          qParams[item.type]?.find(
+                            (item: string) => item === child.name,
+                          )
+                            ? 'border-red-700'
+                            : 'border-transparent'
+                        }
+                      `}
                     style={{
                       backgroundColor: child.palette[0],
                     }}
@@ -82,6 +103,9 @@ export default function NavLeft() {
                   <li
                     key={child.id}
                     className="relative rounded-sm px-2 bg-slate-200 hover:bg-slate-300 cursor-pointer"
+                    onClick={() =>
+                      handleResolve({ type: item.type, id: child.name })
+                    }
                   >
                     {child.name}
                   </li>
