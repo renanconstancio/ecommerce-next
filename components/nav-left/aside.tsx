@@ -32,6 +32,8 @@ export default function NavLeft() {
       arrSearch[type] = arrSearch[type].filter((item) => item !== id)
     }
 
+    console.log(arrSearch)
+
     const buff = encode(`${JSON.stringify(arrSearch)}`)
     uri = `/search?filter_search=`
     if (arrSearch[type].length > 0) uri = `/search?filter_search=${buff}`
