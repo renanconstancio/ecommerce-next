@@ -1,7 +1,7 @@
 'use client'
 
 import { use } from 'react'
-import { getAttributes } from '@/actions/attributes'
+import { getAttributes } from '@/services/attributes'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { decode, encode } from '@/utils/base64'
 

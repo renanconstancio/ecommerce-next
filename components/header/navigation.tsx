@@ -8,7 +8,7 @@ import Container from '@/components/container'
 import Menu from '@/components/header/menu'
 
 import type { CategoryProps } from '@/types'
-import { getCategories } from '@/actions/categories'
+import { getCategories } from '@/services/categories'
 
 export interface HeaderProps {
   data: CategoryProps[]
