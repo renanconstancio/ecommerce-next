@@ -20,7 +20,7 @@ export default function NavLeft() {
 
   const arrSearch: { [x: string]: string[] } = {}
 
-  function handleResolve({ type, id }: { type: string; id: string }) {
+  async function handleResolve({ type, id }: { type: string; id: string }) {
     const isSearch = arrSearch?.[type]?.find((item) => item === id)
     if (!isSearch) {
       if (!arrSearch[type]) {
