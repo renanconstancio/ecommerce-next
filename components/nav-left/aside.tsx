@@ -6,7 +6,9 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { decode, encode } from '@/utils/base64'
 
 export default function NavLeft() {
-  let uri = '/search?filter_search='
+  let uri = '/search'
+  let qParams: string[] = []
+  let arrSearch: string[] = []
 
   const route = useRouter()
 
@@ -14,11 +16,9 @@ export default function NavLeft() {
 
   const { data: dataAttributes } = use(getAttributes())
 
-  let qParams: string[] = []
   if (get('filter_search'))
     qParams = JSON.parse(decode(get('filter_search') || ''))
 
-  let arrSearch: string[] = []
   function handleResolve(child: { [x: string]: string | number | any }) {
     const value = child.name
 
@@ -31,7 +31,7 @@ export default function NavLeft() {
 
     const encodeUri = encode(`${JSON.stringify(arrSearch)}`)
 
-    uri = `/search?filter_search=${encodeUri}`
+    uri = `${uri}?filter_search=${encodeUri}`
 
     route.push(uri)
   }
