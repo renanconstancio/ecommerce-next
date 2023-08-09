@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { decode, encode } from '@/utils/base64'
 
 export default function NavLeft() {
-  let uri = ''
+  let uri = '/search?filter_search='
 
   const route = useRouter()
 
@@ -14,29 +14,24 @@ export default function NavLeft() {
 
   const { data: dataAttributes } = use(getAttributes())
 
-  let qParams: { [x: string]: string[] } = {}
+  let qParams: string[] = []
   if (get('filter_search'))
     qParams = JSON.parse(decode(get('filter_search') || ''))
 
-  const arrSearch: { [x: string]: string[] } = {}
+  let arrSearch: string[] = []
+  function handleResolve(child: { [x: string]: string | number | any }) {
+    const value = child.name
 
-  async function handleResolve({ type, id }: { type: string; id: string }) {
-    const isSearch = arrSearch?.[type]?.find((item) => item === id)
-    if (!isSearch) {
-      if (!arrSearch[type]) {
-        arrSearch[type] = [id]
-      } else {
-        arrSearch[type] = [...arrSearch[type], id]
-      }
+    const isMatch = arrSearch?.find((item) => item === value)
+    if (isMatch) {
+      arrSearch = arrSearch?.filter((item) => item !== value)
     } else {
-      arrSearch[type] = arrSearch[type].filter((item) => item !== id)
+      arrSearch = (arrSearch || []).concat(value)
     }
 
-    console.log(arrSearch)
+    const encodeUri = encode(`${JSON.stringify(arrSearch)}`)
 
-    const buff = encode(`${JSON.stringify(arrSearch)}`)
-    uri = `/search?filter_search=`
-    if (arrSearch[type].length > 0) uri = `/search?filter_search=${buff}`
+    uri = `/search?filter_search=${encodeUri}`
 
     route.push(uri)
   }
@@ -64,11 +59,8 @@ export default function NavLeft() {
                         text-[0px] 
                         cursor-pointer
                         border-[3px]
-                        
                         ${
-                          qParams[item.type]?.find(
-                            (item: string) => item === child.name,
-                          )
+                          qParams?.find((item) => item === child.name)
                             ? 'border-red-700'
                             : 'border-transparent'
                         }
@@ -76,9 +68,7 @@ export default function NavLeft() {
                     style={{
                       backgroundColor: child.palette[0],
                     }}
-                    onClick={() =>
-                      handleResolve({ type: item.type, id: child.name })
-                    }
+                    onClick={() => handleResolve(child)}
                   >
                     <span
                       style={{
@@ -105,9 +95,7 @@ export default function NavLeft() {
                   <li
                     key={child.id}
                     className="relative rounded-sm px-2 bg-slate-200 hover:bg-slate-300 cursor-pointer"
-                    onClick={() =>
-                      handleResolve({ type: item.type, id: child.name })
-                    }
+                    onClick={() => handleResolve(child)}
                   >
                     {child.name}
                   </li>
@@ -124,9 +112,7 @@ export default function NavLeft() {
                     <li
                       key={child.id}
                       className="relative rounded-sm px-2 hover:underline cursor-pointer"
-                      onClick={() =>
-                        handleResolve({ type: item.type, id: child.name })
-                      }
+                      onClick={() => handleResolve(child)}
                     >
                       {child.name}
                     </li>

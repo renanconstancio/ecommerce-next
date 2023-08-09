@@ -26,7 +26,7 @@ export default function RootLayout({
           <Header />
           <Container>
             <main className="flex flex-row flex-nowrap m-4">
-              <Suspense fallback={'A'}>
+              <Suspense fallback={'Carregando menus...'}>
                 <NavLeft />
               </Suspense>
               {children}

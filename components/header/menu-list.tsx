@@ -2,10 +2,10 @@ import menu from './menu.module.css'
 
 import Menu from './menu'
 
-interface MenuItemProps {
+type MenuItemProps = {
   id: string
   name: string
-  childrens: MenuItemProps[]
+  childrens?: MenuItemProps[]
 }
 
 export default function MenuItem({ id, name, childrens }: MenuItemProps) {

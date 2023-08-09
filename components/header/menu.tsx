@@ -3,7 +3,7 @@ import MenuItem from './menu-list'
 type MenuProps = {
   id: string
   name: string
-  childrens: MenuProps[]
+  childrens?: MenuProps[]
 }
 
 export default function Menu({
@@ -11,12 +11,12 @@ export default function Menu({
   className,
   ...rest
 }: {
-  data: MenuProps[]
+  data?: MenuProps[]
   className?: string
 }) {
   return (
     <ul className={className} {...rest}>
-      {data.map((item) => (
+      {data?.map((item) => (
         <MenuItem
           key={item.id}
           id={item.id}
